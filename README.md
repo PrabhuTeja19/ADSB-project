@@ -194,6 +194,28 @@ eastward component of the wind vector 217.157 knots
 northward component of the wind vector 282.843 knots
 wind direction is 322.4841371296373 deg
 ```
+## Output Graph Plot
+
+![Output Graph](https://github.com/PrabhuTeja19/ADSB-project/blob/main/Output%20of%20unit%20test%20code.png)
+
+### Python Output Interpretation
+
+#### Overview
+The following output provides insights into the wind vector calculation based on the given ground speed (`gs`) and true airspeed (`tas`) values.
+#### Calculated Values
+- **Eastward Component**:  
+  - Speed: 217.157 knots
+  - Interpretation: The wind is pushing or coming from the east at a speed of approximately 217.157 knots.
+- **Northward Component**:  
+  - Speed: 282.843 knots
+  - Interpretation: The wind is pushing or coming from the north at a speed of approximately 282.843 knots.
+#### Wind Direction
+- **Direction**:  
+  - Angle: 322.4841371296373 degrees
+  - Interpretation: The wind direction is approximately 322.484 degrees, indicating the wind is coming from the northwest, slightly west of due north.
+#### Summary
+The wind vector calculation suggests that the wind is predominantly coming from the north and east. The northward component of the wind is stronger with a speed of approximately 282.843 knots, while the eastward component has a speed of approximately 217.157 knots.
+
 
 
 
