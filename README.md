@@ -65,6 +65,15 @@ ADS-B, or Automatic Dependent Surveillance–Broadcast, is a revolutionary surve
 - **alt_geom**: Geometric altitude is the actual altitude above the Earth's surface and is used for terrain clearance and vertical navigation.
 - **lat, lon**: Latitude and longitude coordinates pinpoint the exact location of the aircraft on the Earth's surface and are essential for navigation, tracking, and route planning.
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Comparison Plots
+![Comparision plot](https://github.com/PrabhuTeja19/ADSB-project/blob/main/Comparison%20plot.png)
+
+#### Interpretation of gs vs tas
+- **Direct Relationship**: The bar graph highlights a consistent relationship between ground speed (`gs`) and true airspeed (`tas`). Notably, as the ground speed increases, there is a corresponding increase in true airspeed, emphasizing the aircraft's capability to maintain higher speeds efficiently.
+
+- **Speed Consistency**: A key observation from the bar graph is the absence of `tas` data below 250 knots when `gs` is below 250 knots. This pattern indicates that the aircraft consistently operates at speeds above 250 knots, with an average speed likely exceeding 300 knots. Such consistency in speed suggests optimal flight performance, potentially influenced by favorable wind conditions or strategic flight planning.
+
 
 
 
