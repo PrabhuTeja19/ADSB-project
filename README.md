@@ -74,7 +74,11 @@ ADS-B, or Automatic Dependent Surveillance–Broadcast, is a revolutionary surve
 
 - **Speed Consistency**: A key observation from the bar graph is the absence of `tas` data below 250 knots when `gs` is below 250 knots. This pattern indicates that the aircraft consistently operates at speeds above 250 knots, with an average speed likely exceeding 300 knots. Such consistency in speed suggests optimal flight performance, potentially influenced by favorable wind conditions or strategic flight planning.
 
+#### Interpretation of track vs nh
 
+- **Similar Distribution**: Upon analyzing the bar graphs for track and navigation heading (nh), it is evident that both attributes exhibit a similar distribution pattern. The bars in both graphs demonstrate comparable frequencies across their respective categories, indicating consistency in the data distribution for track and nh.
+
+- **Distinct Observation**: Notably, there is a distinct feature observed in the nh bar graph. While the majority of bars align closely with the corresponding bars in the track graph, there is a significant spike in the count value for nh when its value is 0. This spike suggests a notable deviation from the typical distribution, indicating a higher frequency of occurrences where the navigation heading is reported as 0.
 
 
 
