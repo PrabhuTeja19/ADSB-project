@@ -79,10 +79,121 @@ ADS-B, or Automatic Dependent Surveillance–Broadcast, is a revolutionary surve
 - **Similar Distribution**: Upon analyzing the bar graphs for track and navigation heading (nh), it is evident that both attributes exhibit a similar distribution pattern. The bars in both graphs demonstrate comparable frequencies across their respective categories, indicating consistency in the data distribution for track and nh.
 
 - **Distinct Observation**: Notably, there is a distinct feature observed in the nh bar graph. While the majority of bars align closely with the corresponding bars in the track graph, there is a significant spike in the count value for nh when its value is 0. This spike suggests a notable deviation from the typical distribution, indicating a higher frequency of occurrences where the navigation heading is reported as 0.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Wind Vector Calculation and Visualization
 
+This code snippet demonstrates a unit test to calculate and visualize the wind vector based on ground speed (`gs`) and true airspeed (`tas`) vectors. The code performs the following tasks:
 
+1. Converts `gs` and `tas` from polar coordinates to Cartesian coordinates.
+2. Calculates the wind direction and its east-west and north-south components.
+3. Prints the calculated wind direction and components.
+4. Visualizes the `gs`, `tas`, and resultant vectors on a plot using matplotlib.
 
+## Python Code
 
+```python
+import math
+from matplotlib import pyplot as plt
+
+def polar_to_cartesian(speed, heading):
+    x = speed * math.cos(math.radians(heading))
+    y = speed * math.sin(math.radians(heading))
+    return x, y
+
+def get_wind_direction(x, y):
+    angle_rad = math.atan2(y, x)
+    angle_deg = math.degrees(angle_rad) % 360
+    return angle_deg
+
+sample_data = {'gs': 513.8, 'tas': 510, 'track': 69.7, 'nav_heading': 78.8}
+
+gs_x, gs_y = polar_to_cartesian(400, 45)
+tas_x, tas_y = polar_to_cartesian(500, 90)
+
+dif_x = gs_x - tas_x
+dif_y = gs_y - tas_y
+
+print(gs_x, gs_y, tas_x, tas_y)
+wind_direction = get_wind_direction(dif_x, dif_y)
+
+if dif_y > 0:
+    ew = 'west'
+else:
+    ew = 'east'
+
+if dif_x < 0:
+    ns = 'south'
+else:
+    ns = 'north'
+
+print(f'{ew}ward component of the wind vector {round(abs(dif_y),3)} knots\n{ns}ward component of the wind vector {round(abs(dif_x),3)} knots')
+print(f'wind direction is {wind_direction} deg')
+
+plt.figure(figsize=(10,5))
+plt.quiver(0, 0, gs_x, gs_y, angles='xy', scale_units='xy', scale=1, color='black', label='gs', width=0.005, headwidth=4, headlength=5)
+plt.quiver(0, 0, tas_x, tas_y, angles='xy', scale_units='xy', scale=1, color='orange', label='tas', width=0.005, headwidth=4, headlength=5)
+plt.quiver(0, 0, dif_x, dif_y, angles='xy', scale_units='xy', scale=1, color='gray', label='resultant', width=0.005, headwidth=4, headlength=5)
+
+plt.text(900, 20, 'N', fontsize=10, color='black')
+plt.text(-900, 20, 'S', fontsize=10, color='black')
+plt.text(20, 900, 'W', fontsize=10, color='black')
+plt.text(20, -900, 'E', fontsize=10, color='black')
+
+plt.xlim(-1000, 1000)
+plt.ylim(-1000, 1000)
+plt.axhline(0, color='black', linewidth=0.05)
+plt.axvline(0, color='black', linewidth=0.05)
+plt.grid(visible=True, linestyle='--', alpha=0.1)
+plt.legend()
+plt.title(f'{ns} {round(dif_x,3)}, {ew} {round(dif_y,3)}  (in kts) | Direction {round(wind_direction,3)} deg', size=9)
+plt.gca().set_aspect(aspect='equal', adjustable='box')
+plt.tight_layout()
+plt.show()
+```
+## Code Interpretation
+
+The provided code includes functions to convert polar coordinates to Cartesian coordinates and calculate the wind direction based on the difference between two vectors representing ground speed (`gs`) and true airspeed (`tas`). It also includes a visualization using matplotlib to display the vectors and their resultant.
+
+### Functions:
+
+#### polar_to_cartesian(speed, heading):
+
+- **Functionality**: 
+    - Converts polar coordinates (speed and heading) to Cartesian coordinates (x, y).
+- **Returns**: 
+    - The x and y components of the vector.
+
+#### get_wind_direction(x, y):
+
+- **Functionality**: 
+    - Calculates the wind direction based on the Cartesian components (x, y) of the wind vector.
+- **Returns**: 
+    - The wind direction in degrees.
+
+### Code Execution:
+
+#### Sample Data:
+
+- `sample_data` dictionary contains sample values for ground speed (`gs`), true airspeed (`tas`), track, and navigation heading (`nav_heading`).
+
+#### Calculations:
+
+- `gs_x, gs_y` and `tas_x, tas_y` store the Cartesian coordinates for `gs` and `tas` vectors, respectively.
+- `dif_x` and `dif_y` calculate the differences between the x and y components of the `gs` and `tas` vectors.
+
+#### Wind Direction and Components:
+
+- `get_wind_direction(dif_x, dif_y)` calculates the wind direction based on the difference between `gs` and `tas` vectors.
+- `if` conditions determine the east-west and north-south components of the wind vector based on `dif_x` and `dif_y`.
+- `print` statements display the east-west and north-south components of the wind vector, as well as the calculated wind direction.
+
+# Output
+```output
+282.842712474619 282.84271247461896 3.061616997868383e-14 500.0
+eastward component of the wind vector 217.157 knots
+northward component of the wind vector 282.843 knots
+wind direction is 322.4841371296373 deg
+```
 
 
 
