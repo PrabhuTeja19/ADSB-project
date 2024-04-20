@@ -307,6 +307,9 @@ The output section displays:
 
 The code aims to visualize wind vectors for the given data samples, offering insights into the wind's direction and speed relative to the aircraft's ground speed and true airspeed. The plotted vectors aid in understanding the wind's impact on the aircraft's movement using the provided ADS-B data.
 
+![Wind Vector Output](https://github.com/PrabhuTeja19/ADSB-project/blob/main/wind%20vector%20output.png)
+
+
 
 
 
