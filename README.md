@@ -90,7 +90,7 @@ This code snippet demonstrates a unit test to calculate and visualize the wind v
 4. Visualizes the `gs`, `tas`, and resultant vectors on a plot using matplotlib.
 
 ## Python Code
-
+ ### For Unit Test
 ```python
 import math
 from matplotlib import pyplot as plt
@@ -187,7 +187,7 @@ The provided code includes functions to convert polar coordinates to Cartesian c
 - `if` conditions determine the east-west and north-south components of the wind vector based on `dif_x` and `dif_y`.
 - `print` statements display the east-west and north-south components of the wind vector, as well as the calculated wind direction.
 
-# Output
+## Output
 ```output
 282.842712474619 282.84271247461896 3.061616997868383e-14 500.0
 eastward component of the wind vector 217.157 knots
@@ -215,6 +215,98 @@ The following output provides insights into the wind vector calculation based on
   - Interpretation: The wind direction is approximately 322.484 degrees, indicating the wind is coming from the northwest, slightly west of due north.
 #### Summary
 The wind vector calculation suggests that the wind is predominantly coming from the north and east. The northward component of the wind is stronger with a speed of approximately 282.843 knots, while the eastward component has a speed of approximately 217.157 knots.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Wind Vector Analysis Code
+```python
+cax = 3
+rax = round(len(final_data[:27]) / 3) + 1
+fig, ax = plt.subplots(rax, cax, figsize=(20,40))
+ax = ax.flatten()
+
+def vector_plot(gs_x, gs_y, tas_x, tas_y, dif_x, dif_y, wd, i):
+    ax[i].quiver(0, 0, gs_x, gs_y, angles = 'xy', scale_units = 'xy', scale = 1, color='black', label='gs', width=0.005, headwidth=4, headlength=5)
+    ax[i].quiver(0, 0, tas_x, tas_y, angles = 'xy', scale_units = 'xy', scale = 1, color='orange', label='tas', width=0.005, headwidth=4, headlength=5)
+    ax[i].quiver(0, 0, dif_x, dif_y, angles = 'xy', scale_units = 'xy', scale = 1, color='gray', label='resultant', width=0.005, headwidth=4, headlength=5)
+    ax[i].set_xlim(-1000,1000)
+    ax[i].set_ylim(-1000,1000)
+    ax[i].axhline(0, color = 'black', linewidth = 0.1)
+    ax[i].axvline(0, color = 'black', linewidth = 0.1)
+    ax[i].grid(visible=True, linestyle = '--', alpha = 0.4)
+    ax[i].legend()
+    ax[i].set_title(f'{ns} {round(dif_x,3)}, {ew} {round(dif_y,3)}  (in kts) | Direction {round(wind_direction,3)} deg', size=9)
+    ax[i].text(900, 20, 'N', fontsize=10, color='black')
+    ax[i].text(-900, 20, 'S', fontsize=10, color='black')
+    ax[i].text(20, 900, 'W', fontsize=10, color='black')
+    ax[i].text(20, -900, 'E', fontsize=10, color='black')
+
+
+for i, sample_data in enumerate(final_data[:27]):
+    gs_x, gs_y, tas_x, tas_y, dif_x, dif_y = None, None, None, None, None, None
+    gs_x, gs_y = polar_to_cartesian(sample_data['gs'], sample_data['nav_heading'])
+    tas_x, tas_y = polar_to_cartesian(sample_data['tas'],  sample_data['nav_heading'])
+    dif_x = gs_x - tas_x
+    dif_y = gs_y - tas_y
+    wind_direction = get_wind_direction(dif_x, dif_y)
+    if dif_y > 0:
+        ew = 'west'
+    else:
+        ew = 'east'
+
+    if dif_x < 0:
+        ns = 'south'
+    else:
+        ns = 'north'
+    print(sample_data['gs'], sample_data['tas'], sample_data['nav_heading'], gs_x, gs_y, tas_x, tas_y, dif_x, dif_y)
+    print(f'{ew}ward component of the wind vector {round(abs(dif_y),3)} knots\n{ns}ward component of the wind vector {round(abs(dif_x),3)} knots')
+    print(f'wind direction is {wind_direction} deg\n')
+    vector_plot(gs_x, gs_y, tas_x, tas_y, dif_x, dif_y, wind_direction, i)
+
+plt.gca().set_aspect(aspect='equal', adjustable='box')
+plt.tight_layout()
+plt.show()
+```
+## Code Interpretation
+
+The provided Python code is designed to visualize and analyze wind vectors based on ground speed (`gs`) and true airspeed (`tas`) data from the `final_data` list.
+
+### Variables and Setup
+
+- `cax = 3`: Specifies the number of columns in the subplot grid.
+- `rax = round(len(final_data[:27]) / 3) + 1`: Determines the number of rows in the subplot grid based on the data length.
+- `fig, ax = plt.subplots(rax, cax, figsize=(20,40))`: Initializes a figure with subplots based on the row and column counts.
+- `ax = ax.flatten()`: Flattens the 2D array of axes into a 1D array for easier iteration.
+
+### Functions
+
+- `vector_plot(gs_x, gs_y, tas_x, tas_y, dif_x, dif_y, wd, i)`: A function utilized to plot vectors representing ground speed, true airspeed, and the resultant wind. This function also adds annotations, legends, and grid lines to the plots.
+
+### Data Processing and Visualization
+
+1. **Data Iteration**: 
+   - Iterates through the first 27 data samples from `final_data`.
+   - Extracts `gs`, `tas`, and `nav_heading` from each sample.
+   - Calculates Cartesian coordinates for `gs` and `tas` using the `polar_to_cartesian()` function.
+   - Computes the difference vectors (`dif_x` and `dif_y`).
+2. **Wind Direction Calculation**:
+   - Utilizes `get_wind_direction(dif_x, dif_y)` to calculate the wind direction.
+   - Determines the cardinal directions (`north`, `south`, `east`, `west`) based on the sign of `dif_x` and `dif_y`.
+3. **Visualization**:
+   - Prints the calculated values and wind direction for each data sample.
+   - Plots the vectors using the `vector_plot()` function.
+   - Adds annotations, legends, and grid lines to the plots.
+
+### Output
+
+The output section displays:
+- Cartesian coordinates for `gs` and `tas`.
+- Difference vectors `dif_x` and `dif_y`.
+- Wind direction in degrees.
+- Eastward and northward components of the wind vector.
+
+The code aims to visualize wind vectors for the given data samples, offering insights into the wind's direction and speed relative to the aircraft's ground speed and true airspeed. The plotted vectors aid in understanding the wind's impact on the aircraft's movement using the provided ADS-B data.
+
 
 
 
