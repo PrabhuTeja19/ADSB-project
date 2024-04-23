@@ -1,5 +1,3 @@
-# ADSB-project
-
 # Identifying the prevailing wind speed and direction influencing the aircraft from Automatic Dependent Surveillance–Broadcast Data.
 
 --------------------------------------------------------------------------------------------------------------------------------------
@@ -46,7 +44,7 @@ ADS-B, or Automatic Dependent Surveillance–Broadcast, is a revolutionary surve
 ![ADS-B Image](https://github.com/PrabhuTeja19/ADSB-project/raw/main/Screenshot%202024-04-20%20134502.png)
 
 
-## Dataset Dictionary:
+## Data Dictionary:
 ### Key Attributes
 
 - **gs**: Ground speed (GS) refers to the speed of the aircraft relative to the ground, measured in knots.
@@ -66,7 +64,7 @@ ADS-B, or Automatic Dependent Surveillance–Broadcast, is a revolutionary surve
 - **lat, lon**: Latitude and longitude coordinates pinpoint the exact location of the aircraft on the Earth's surface and are essential for navigation, tracking, and route planning.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-## Comparison Plots
+## Distribution Plots
 ![Comparision plot](https://github.com/PrabhuTeja19/ADSB-project/blob/main/Comparison%20plot.png)
 
 #### Interpretation of gs vs tas
@@ -77,8 +75,7 @@ ADS-B, or Automatic Dependent Surveillance–Broadcast, is a revolutionary surve
 #### Interpretation of track vs nh
 - **Similar Distribution**: Upon analyzing the bar graphs for track and navigation heading (nh), it is evident that both attributes exhibit a similar distribution pattern. The bars in both graphs demonstrate comparable frequencies across their respective categories, indicating consistency in the data distribution for track and nh.
 
-- **Distinct Observation**: Notably, there is a distinct feature observed in the nh bar graph. While the majority of bars align closely with the corresponding bars in the track graph, there is a significant spike in the count value for nh when its value is 0. This spike suggests a notable deviation from the typical distribution, indicating a higher frequency of occurrences where the navigation heading is reported as 0.
-- 
+- **Distinct Observation**: Notably, there is a distinct feature observed in the nh bar graph. While the majority of bars align closely with the corresponding bars in the track graph, there is a significant spike in the count value for nh when its value is North. This spike suggests a notable deviation from the typical distribution, indicating a higher frequency of occurrences where the navigation heading is reported as North.
 - **Aircraft Direction Consistency**: Based on the data attributes of track and navigation heading, it can be inferred that most of the time, the aircraft moves in the direction it is pointing. The consistent distribution between track and nh suggests that the aircraft generally aligns its movement with its navigation heading, emphasizing the importance of navigation accuracy and consistency for aircraft operations.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Wind Vector Calculation and Visualization
@@ -205,20 +202,28 @@ The following output provides insights into the wind vector calculation based on
 #### Calculated Values
 - **Eastward Component**:  
   - Speed: 217.157 knots
-  - Interpretation: The wind is pushing or blowing from the east at a speed of approximately 217.157 knots.
+  - Interpretation: The wind is pushing or blowing towards the east at a speed of 217.157 knots.
 - **Northward Component**:  
   - Speed: 282.843 knots
-  - Interpretation: The wind is pushing or blowing from the north at a speed of approximately 282.843 knots.
+  - Interpretation: The wind is pushing or blowing towards the north at a speed of 282.843 knots.
 #### Wind Direction
 - **Direction**:  
   - Angle: 322.4841371296373 degrees
   - Interpretation: The wind direction is approximately 322.484 degrees, indicating the wind is coming from the northwest, slightly west of due north.
 #### Summary
-The wind vector calculation suggests that the wind is predominantly coming from the north and east. The northward component of the wind is stronger with a speed of approximately 282.843 knots, while the eastward component has a speed of approximately 217.157 knots.
+The wind vector calculation suggests that the wind is predominantly pushing towards the north and east. The northward component of the wind is stronger with a speed of approximately 282.843 knots, while the eastward component has a speed of approximately 217.157 knots.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Wind Vector Analysis Code
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Wind Vector Visualization
 ```python
 cax = 3
 rax = round(len(final_data[:27]) / 3) + 1
