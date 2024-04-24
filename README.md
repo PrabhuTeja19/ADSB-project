@@ -401,7 +401,7 @@ The code aims to visualize wind vectors for the given data samples, offering ins
 ![Wind Vector Output](https://github.com/PrabhuTeja19/ADSB-project/blob/main/wind%20vector%20output.png)
 
 
-# Wind Vector Prediction API with Flask
+# Wind Vector Visualization using Flask
 
 ## Overview
 
@@ -437,7 +437,7 @@ The code leverages the Flask framework to create a web API facilitating interact
   
   ```
 
-### API Endpoints for Model Interaction
+### Endpoints for Model Interaction
 - **'/plotvector' - plotvector():**
   ```python
   @app.route('/plotvector')
@@ -455,6 +455,8 @@ Endpoint for visualizing wind vectors based on specific altitude bins. Accepts a
 This is the final output plot of wind direction vector. The graph plot showcases the ground speed vector, true air speed vector, and wind vector.
 
 ![Wind Vector Plot](https://github.com/PrabhuTeja19/ADSB-project/raw/main/final%20outputplot.png)
+
+
 
 
 
