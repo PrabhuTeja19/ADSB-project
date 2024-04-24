@@ -214,6 +214,92 @@ The following output provides insights into the wind vector calculation based on
 The wind vector calculation suggests that the wind is predominantly pushing towards the north and east. The northward component of the wind is stronger with a speed of approximately 282.843 knots, while the eastward component has a speed of approximately 217.157 knots.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Data Aggregation for Analysis:
+```python
+
+def wind_vectors(path):
+    seen = set()
+    final_unique_data = []
+    for file in os.listdir(path):
+        c = 0
+        fp = open(os.path.join(path,file), 'r')
+        cols = ['tas','gs','nav_heading', 'alt_geom', 'lat', 'lon']
+        for row in fp:
+            row = json.loads(row)
+            dto = None
+            dto = datetime.datetime.strptime(row['dt'], "%Y-%m-%d %H:%M:%S.%f")
+            dto = dto.date()
+            dto = datetime.datetime.strftime(dto, "%Y-%m-%d")
+            payload = row['payload']
+            d = {}
+            if isinstance(payload, dict):
+                if set(cols).issubset(set(payload.keys())):
+                    d['dt'] = dto
+                    d['hex'] = payload['hex']
+                    d['gs'] = payload['gs']
+                    d['tas'] = payload['tas']
+                    d['track'] = payload['track']
+                    d['nav_heading'] = payload['nav_heading']
+                    d['alt_geom'] = payload['alt_geom']
+                    d['lat'] = payload['lat']
+                    d['lon'] = payload['lon']
+                    t = tuple(d.items())
+                    if t not in seen:
+                        final_unique_data.append(d)
+                        seen.add(t)
+    
+    bin_5_15, bin_15_25, bin_25_35, bin_35_45 = [], [], [], []
+
+    for d in final_unique_data:
+        if d['alt_geom'] > 5000 and d['alt_geom'] <= 15000:
+            bin_5_15.append(d)
+        elif d['alt_geom'] > 15000 and d['alt_geom'] <= 25000:
+            bin_15_25.append(d)
+        elif d['alt_geom'] > 25000 and d['alt_geom'] <= 35000:
+            bin_25_35.append(d)
+        elif d['alt_geom'] > 35000 and d['alt_geom'] <= 45000:
+            bin_35_45.append(d)
+    return bin_5_15, bin_15_25, bin_25_35, bin_35_45, final_unique_data
+
+bin_5_15, bin_15_25, bin_25_35, bin_35_45, final_unique_data = wind_vectors(path)
+
+
+def agg_bins(bin, bin_name):
+    keys_to_avg = ['gs', 'tas', 'track', 'nav_heading']
+    sum_dict = {key: 0 for key in keys_to_avg}
+    count_dict = {key: 0 for key in keys_to_avg}
+    for d in bin:
+        for k in keys_to_avg:
+            sum_dict[k] += d.get(k, 0)
+            if k in d:
+                count_dict[k] += 1
+    avg_dict = {k: round(sum_dict[k]/count_dict[k],4) if count_dict[k]>0 else 0 for k in keys_to_avg}
+    avg_dict['bin'] = bin_name
+    return avg_dict
+
+bin_5_15_agg = agg_bins(bin_5_15, 'bin_5_15')
+bin_15_25_agg = agg_bins(bin_15_25, 'bin_15_25')
+bin_25_35_agg = agg_bins(bin_25_35, 'bin_25_35')
+bin_35_45_agg = agg_bins(bin_35_45, 'bin_35_45')
+final_agg_data = [bin_5_15_agg, bin_15_25_agg, bin_25_35_agg, bin_35_45_agg]
+final_agg_data
+```
+# Purpose of the Code:
+The code aims to process and analyze aircraft data captured through an ADS-B receiver.
+### Removing Duplicates:
+Initially, the code filters out duplicate data entries based on the 'Hex' and 'DT' variables. This ensures that each unique aircraft record is considered only once.
+### Aggregation:
+Post-duplicate removal, the data is aggregated into distinct altitude bins ranging from 5-15K, 15-25K, 25-35K, and 35-45K feet. This aggregation is performed based on the aircraft's altitude ('alt'), longitude ('lon'), and latitude ('lat').
+### Averaging Payload Values:
+Within each altitude bin, the code calculates the average values of 'gs' (ground speed), 'tas' (true air speed), 'nh' (navigation heading), and 'track'. This provides a consolidated representation of the payload data for each altitude bin.
+### Wind Vector Calculation:
+Finally, the code computes the wind vector for each aggregated data set. It does so by converting the ground speed and true air speed of each data point into Cartesian coordinates, determining the difference between them, and deriving the wind direction and speed.
+### Aggregating Data into Bins:
+The following segment describes the aggregation of aircraft data into specific altitude bins:
+- **`agg_bins(bin, bin_name)`:** This function aggregates the provided `bin` of data and labels the resulting aggregated data with `bin_name`.
+- **`bin_5_15_agg`, `bin_15_25_agg`, `bin_25_35_agg`, `bin_35_45_agg`:** These variables store the aggregated data corresponding to altitude bins of 5-15K, 15-25K, 25-35K, and 35-45K feet respectively.
+- **`final_agg_data`:** This list combines all aggregated data from the distinct altitude bins.
+By organizing the data in this manner, the code facilitates a structured examination of aircraft behavior across different altitude intervals. This structured approach aids in uncovering altitude-specific movement patterns and trends, offering valuable insights into aircraft navigation and wind behavior.
 
 
 
@@ -313,6 +399,53 @@ The output section displays:
 The code aims to visualize wind vectors for the given data samples, offering insights into the wind's direction and speed relative to the aircraft's ground speed and true airspeed. The plotted vectors aid in understanding the wind's impact on the aircraft's movement using the provided ADS-B data.
 
 ![Wind Vector Output](https://github.com/PrabhuTeja19/ADSB-project/blob/main/wind%20vector%20output.png)
+
+
+# Wind Vector Prediction API with Flask
+
+## Overview
+
+This Flask application serves as an API for generating wind vector plots based on user-selected altitude bin ranges. Leveraging aircraft data from an ADS-B receiver, the API provides an endpoint where users can specify the altitude bin range, and in response, the API computes and returns the wind vector plot corresponding to that range.
+
+## Features
+
+### Flask Application Setup
+
+The code leverages the Flask framework to create a web API facilitating interaction with the wind vector prediction model.
+
+- **Flask Initialization:**
+  ```python
+  app = Flask(__name__, static_url_path='')
+  ```
+
+  -**Static File Serving:**
+  ```python
+  @app.route('/static/<path:path>')
+  def send_static(path):
+      return send_from_directory('static', path)
+  ```
+### Flask Routes and Endpoints
+
+#### Default Route
+
+- **'/' - binning():**
+  ```python
+  @app.route('/')
+  def binning():
+      return render_template('test.html')
+  #Renders the 'test.html' template when the root URL is accessed.
+  
+  ```
+
+### API Endpoints for Model Interaction
+- **'/plotvector' - plotvector():**
+  ```python
+  @app.route('/plotvector')
+  def plotvector():
+      bin = request.args.get('bin')
+      ...
+   ```
+Endpoint for visualizing wind vectors based on specific altitude bins. Accepts altitude bin as a query parameter.
 
 
 
