@@ -447,6 +447,16 @@ The code leverages the Flask framework to create a web API facilitating interact
    ```
 Endpoint for visualizing wind vectors based on specific altitude bins. Accepts altitude bin as a query parameter.
 
+* Running on http://127.0.0.2:5000
+  - The web page will load with a dropdown menu prompting the user to select a bin range.
+  - A search bar labeled "Show Chart" is available.
+  - After selecting the bin range and clicking "Show Chart," the wind vector plot will be displayed.
+
+This is the final output plot of wind direction vector. The graph plot showcases the ground speed vector, true air speed vector, and wind vector.
+
+![Wind Vector Plot](https://github.com/PrabhuTeja19/ADSB-project/raw/main/final%20outputplot.png)
+
+
 
 
 
