@@ -1,0 +1,96 @@
+<html>
+    <head>
+        {% if title %}
+        <title> {{ title }} to 626 project</title>
+        {% else %}
+        <title> welcome to 626 project</title>
+        {% endif %}
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <script src="static/plotly-latest.min.js"></script>
+        <style>
+            /* Center align elements */
+            .center {
+                text-align: center;
+            }
+            /* Style for image */
+            img {
+                width: 100%;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <img src = 'static/images/flight1.jpg' style="width:2000px; height:200px;"><br>
+        <div style="position:absolute; top:0; left:10; padding:10px;  font-size:22px; color:white; font-family:'Times New Roman', Times, serif; line-height:0.5;">
+            <p>IA626 - Big Data and Cloud Svcs</p>
+            <font size = 3><p>Nisar Ahamad Killedar</p></font>
+            <font size = 3><p>Prabhu Teja Gande</p></font>
+          </div>
+        <marquee behavior="scroll" direction="left" bgcolor="LightGray" height="20">ADS-B (Automatic Dependent Surveillance–Broadcast), is a revolutionary surveillance technology transforming the aviation industry. By utilizing onboard satellite navigation systems, ADS-B enables aircraft to accurately determine their position and broadcast this information at regular intervals to ground stations and nearby aircraft</marquee>
+        {% block content %}{% endblock %}
+        {% block new %}{% endblock %}
+    </body>
+    <script>
+        var gs_x = {{gs_x}};
+        var gs_y = {{gs_y}};
+        var alt = {{alt}};
+        var tas_x = {{tas_x}};
+        var tas_y = {{tas_y}};
+        var dif_x = {{dif_x}};
+        var dif_y = {{dif_y}};
+
+        console.log("The value of myVariable is:", gs_x, gs_y, tas_x, tas_y);
+        var traces1 = {
+            name:'Ground Speed Vector',
+            type: "line",
+            x: [0, gs_x],
+            y: [0, gs_y]
+            //   z: [0, alt]
+            };
+        var traces2 = {
+            name:'True air Speed Vector',
+            type: "line",
+            x: [0, tas_x],
+            y: [0, tas_y]
+            //   z: [0, alt]
+            };
+        var traces3 = {
+            name:'Wind Vector',
+            type: "line",
+            x: [0, dif_x],
+            y: [0, dif_y],
+            yaxis: 'y3'
+            //   z: [0, alt]
+            };
+        var traces = [traces1, traces2, traces3];
+        var layout = {
+            title: "Vector Plot",
+            width: 700,
+            height: 500,
+            xaxis: {
+                    title: 'East',
+                    range: [-1000, 1000],
+                    tickfont: {size: 10},
+                    zeroline: true,
+                    // tickprefix: "E "
+                    },
+            yaxis :{
+                title: 'South',
+                    range: [-1000, 1000],
+                    tickfont: {size: 10},
+                    zeroline: true,
+                    // tickprefix: "S "
+                },
+            yaxis3: {
+                title: 'North',
+                overlaying: 'y',
+                side: 'right',
+                anchor: 'x',
+                tickfont: {size: 1},
+                range: [-1000, 1000],
+                }
+            }
+     Plotly.newPlot('myDiv', traces, layout);
+    </script>
+
+</html>

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .center{text-align:center;}
+    select {
+            width: 200px; /* Adjust the width as needed */
+            height: 30px; /* Adjust the height as needed */
+            font-size: 16px; /* Adjust the font size as needed */
+        }
+        /* Style for submit button */
+        input[type="submit"] {
+            width: 150px; /* Adjust the width as needed */
+            height: 40px; /* Adjust the height as needed */
+            font-size: 18px;
+        }
+        </style>
+</style>
+<div class = "center">
+<br><font size=10 face="Times New Roman" color="Teal">Wind Vector Visualization </font><br><br>
+    <form action="/plotvector" method = "GET">
+        <label for="bins" style="font-size: 16px; font-family: Helvetica">Select Bin:</label>
+            <select name="bin" id="bins">
+                <option value="">Select</option>
+                <option value="1">bin_5_15</option>
+                <option value="2">bin_15_25</option>
+                <option value="3">bin_25_35</option>
+                <option value="4">bin_35_45</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Show chart" onclick="return validateForm()" />
+        </form>
+    </div>
+    <script>
+        function validateForm() {
+            var selectedBin = document.getElementById("bins").value;
+            if (selectedBin == "") {
+                alert("Please select a bin.");
+                return false; 
+            }
+            return true; 
+        }
+    </script>
+{% endblock %}

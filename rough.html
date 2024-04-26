@@ -1,0 +1,54 @@
+var gs_x = gs_x; // Sample data, replace with actual values
+        var gs_y = gs_y;
+        var tas_x = tas_x;
+        var tas_y = tas_y;
+        var dif_x = dif_x;
+        var dif_y = dif_y;
+        var wind_direction = wind_direction;
+        var alt = alt
+        console.log("The value of myVariable is:", gs_x);
+var traces = [
+            {
+            type: 'scatter',
+            x: [0, gs_x],
+            y: [0, gs_y],
+            mode: 'lines',
+            name: 'gs',
+            line: {color: 'black'},
+            },
+            {
+            type: 'scatter',
+            x: [0, tas_x],
+            y: [0, tas_y],
+            mode: 'lines+markers',
+            name: 'tas',
+            line: {color: 'orange'},
+            },
+            {
+            type: 'scatter',
+            x: [0, dif_x],
+            y: [0, dif_y],
+            mode: 'marker',
+            name: 'wind',
+            line: {color: 'red'},
+            }
+        ];
+
+        // Layout
+        var layout = {
+            title: "Vector plot",
+            xaxis: {
+            title: {text: 'East-West'},
+            range: [-1000, 1000],
+            tickfont: {size: 10},
+            zeroline: false,
+            },
+            yaxis: {
+            title: {text: 'North-South'},
+            range: [-1000, 1000],
+            tickfont: {size: 10},
+            zeroline: false,
+            },
+            grid: {visible: true, dash: 'dash', opacity: 0.4},
+            legend: {font: {size: 8}},
+        };
